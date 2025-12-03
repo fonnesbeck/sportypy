@@ -8,7 +8,7 @@ SportyPy will be designed around several core analytical pillars frequently used
 
 ## SportyPy Implementation Plan
 
-### I. Foundational Architecture and Dependencies
+### I. Foundational Architecture
 
 The library will leverage Python's strong data science ecosystem, utilizing core libraries for performance and data management.
 
@@ -85,7 +85,3 @@ This module handles seamless integration with external sports data sources.
 
 *   **Data Connectors:** Provide utilities for connecting to common public APIs and specialized libraries (e.g., leveraging `nba_api`, `nflfastR`, `sportsreference`, or `py_football` concepts) to collect and parse statistics.
 *   **Preprocessing Utilities:** Functions for standard tasks like feature standardization and normalization, as well as domain-specific feature creation (e.g., True Shooting Percentage, Rushing Yards Over Expected, Completion Percentage Over Expected).
-
-***
-
-The proposed SportyPy library acts as a sophisticated toolbox, integrating proven methods like Hierarchical Gaussian Processes for spatial analysis and Causal Inference for bias adjustment, encapsulated within flexible Python classes. It is modeled after the probabilistic approach seen in the advanced baseball projection systems that quantify true talent ($\gamma$) and future uncertainty.
