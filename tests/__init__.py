@@ -1,0 +1,1 @@
+"""SportyPy test suite."""
