@@ -8,13 +8,7 @@ SportyPy is a Python library for sports analytics, built on **PyMC** for Bayesia
 
 ### I. Foundational Architecture
 
-The library leverages Python's data science ecosystem with PyMC as the core modeling engine.
-
-| Component | Description | Supporting Source Concepts |
-| :--- | :--- | :--- |
-| **Language & Core Stack** | Python, relying on **NumPy** for numerical efficiency and **Polars** for high-performance data manipulation. | Standard data science toolkit. |
-| **Statistical Backend** | **PyMC** serves as the probabilistic programming foundation, providing MCMC sampling, variational inference, and GPU acceleration via PyTensor. This enables hierarchical Bayesian models for latent skills, uncertainty quantification, and robust inference with heavy-tailed distributions. | ADVI optimization for projections, Bayesian Hierarchical Regression for player/team effects, Multivariate t distribution for robustness against outliers. |
-| **Modularity & Extensibility** | The library is modular, with distinct sub-modules for different analytical concerns (e.g., `sportypy.projections`, `sportypy.spatial`). It offers **high-level wrappers** built on PyMC model classes for defining complex hierarchical models. | SportyPy abstracts PyMC model construction into domain-specific APIs. |
+SportyPy is built on **PyMC** as the core modeling engine, leveraging Python's data science ecosystem. The language and core stack rely on **NumPy** for numerical efficiency and **Polars** for high-performance data manipulation, providing a standard and modern data science toolkit. The statistical backend uses **PyMC** as the probabilistic programming foundation, providing MCMC sampling, variational inference, and GPU acceleration via PyTensor. This enables hierarchical Bayesian models for latent skills, uncertainty quantification, and robust inference with heavy-tailed distributions—including applications like ADVI optimization for projections, Bayesian Hierarchical Regression for player/team effects, and Multivariate t distributions for robustness against outliers. The library itself is modular, with distinct sub-modules for different analytical concerns (e.g., `sportypy.projections`, `sportypy.spatial`), offering **high-level wrappers** built on PyMC model classes for defining complex hierarchical models. Through these wrappers, SportyPy abstracts PyMC model construction into domain-specific APIs, balancing flexibility with ease of use.
 
 ### II. Core Modeling Modules
 
@@ -22,7 +16,7 @@ SportyPy features dedicated modules for high-level components: Aging Curves/Proj
 
 #### 1. `sportypy.projections` (Latent Skills and Aging Curves)
 
-This module enables long-term performance forecasting using PyMC's hierarchical modeling capabilities.
+SportyPy enables performance forecasting using PyMC's hierarchical modeling capabilities.
 
 *   **Latent Skill Modeling:** Implements "true skill" as a **latent quantity** using PyMC's latent variable framework. Applicable to any sport where observed performance metrics reflect underlying abilities.
     *   *Feature Set:* Define inputs $Y_{ijk}$ (observed metrics) and model latent skills $\gamma_{ij}$ based on performance indicators.
@@ -32,7 +26,7 @@ This module enables long-term performance forecasting using PyMC's hierarchical 
     *   Aging curves are parameterized as polynomial or spline functions of age to capture expected improvement or decline over time.
     *   The model supports computing projections over arbitrary lengths for simulation of **full career trajectories**.
 
-*   **Probabilistic Output:** All projections return posterior distributions via PyMC's `InferenceData` objects, providing both point estimates and **full uncertainty quantification** for risk assessment in predictions about total future value.
+*   **Probabilistic Output:** All projections return posterior distributions via `arviz.InferenceData` objects, providing both point estimates and **full uncertainty quantification** for risk assessment in predictions about total future value.
 
 #### 2. `sportypy.causal` (Selection Bias and Level Adjustments)
 
@@ -70,7 +64,7 @@ This module handles quantification of value changes during a game using PyMC for
 
 This module offers high-level PyMC-based wrappers for Bayesian prediction in sports analytics.
 
-*   **Regression and Classification:** Wrappers for Bayesian versions of common sports prediction models using PyMC's `bambi` integration:
+*   **Regression and Classification:** Wrappers for Bayesian versions of common sports prediction models:
     *   **Logistic Regression** for binary outcomes (win/loss, shot make/miss)
     *   **Poisson/Negative Binomial Regression** for count data (goals, points, assists)
     *   **Ordinal Regression** for ranked outcomes
