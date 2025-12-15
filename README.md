@@ -1,5 +1,7 @@
 # SportyPy: Probabilistic Modeling for Sports Analytics
 
+![SportyPy Logo](sportypy_logo_256.png)
+
 SportyPy is a Python library for sports analytics, built on **PyMC** for Bayesian inference and probabilistic modeling. It provides a modular, high-level interface for hierarchical models, causal inference, and latent variable projections—techniques frequently used in professional sports analytics.
 
 ---
