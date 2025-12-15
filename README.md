@@ -2,9 +2,7 @@
 
 ![SportyPy Logo](sportypy_logo_256.png)
 
----
-
-## SportyPy Implementation Plan
+## Implementation Plan
 
 ### I. Foundational Architecture
 
