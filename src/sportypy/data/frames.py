@@ -1,8 +1,8 @@
 """
-Dataframe utilities using Narwhals for backend-agnostic operations.
+Dataframe utilities using Polars.
 
-This module provides a unified interface for dataframe operations that works
-with both Polars (preferred) and Pandas backends via Narwhals.
+This module provides utilities for working with Polars DataFrames,
+including Narwhals wrappers for interoperability with other libraries.
 
 Example usage:
     import polars as pl
@@ -11,38 +11,43 @@ Example usage:
     # Create a Polars dataframe
     df = pl.DataFrame({"x": [1, 2, 3], "y": [4, 5, 6]})
 
-    # Wrap it for Narwhals operations
+    # Wrap it for Narwhals operations (useful for library interop)
     nw_df = wrap_frame(df)
 
     # Perform operations using Narwhals API
     result = nw_df.select("x", "y").filter(nw.col("x") > 1)
 
-    # Convert back to native format
+    # Convert back to Polars
     native_df = to_native(result)
 """
 
 from __future__ import annotations
 
-from typing import TYPE_CHECKING, TypeVar
+from typing import Any, Literal
 
 import narwhals as nw
-from narwhals.typing import IntoFrame
+import polars as pl
 
-if TYPE_CHECKING:
-    import pandas as pd
-    import polars as pl
+ConcatMethod = Literal[
+    "vertical",
+    "vertical_relaxed",
+    "horizontal",
+    "diagonal",
+    "diagonal_relaxed",
+    "align",
+]
 
-T = TypeVar("T", bound=IntoFrame)
 
-
-def wrap_frame(df: IntoFrame) -> nw.DataFrame[IntoFrame]:
+def wrap_frame(df: pl.DataFrame | pl.LazyFrame) -> nw.DataFrame[Any]:
     """
-    Wrap a native dataframe (Polars or Pandas) in a Narwhals DataFrame.
+    Wrap a Polars dataframe in a Narwhals DataFrame.
+
+    This is useful for interoperability with libraries that use Narwhals.
 
     Parameters
     ----------
-    df : IntoFrame
-        A Polars DataFrame, Pandas DataFrame, or other Narwhals-compatible frame.
+    df : pl.DataFrame | pl.LazyFrame
+        A Polars DataFrame or LazyFrame.
 
     Returns
     -------
@@ -52,9 +57,9 @@ def wrap_frame(df: IntoFrame) -> nw.DataFrame[IntoFrame]:
     return nw.from_native(df)
 
 
-def to_native(df: nw.DataFrame[T]) -> T:
+def to_native(df: nw.DataFrame[Any]) -> pl.DataFrame:
     """
-    Convert a Narwhals DataFrame back to its native format.
+    Convert a Narwhals DataFrame back to Polars.
 
     Parameters
     ----------
@@ -63,76 +68,62 @@ def to_native(df: nw.DataFrame[T]) -> T:
 
     Returns
     -------
-    IntoFrame
-        The native dataframe (Polars or Pandas).
+    pl.DataFrame
+        The native Polars DataFrame.
     """
-    return df.to_native()
+    return df.to_native()  # type: ignore[return-value]
 
 
-def create_empty_frame(
-    schema: dict[str, type], *, backend: str = "polars"
-) -> nw.DataFrame[IntoFrame]:
+def create_empty_frame(schema: dict[str, type]) -> pl.DataFrame:
     """
-    Create an empty dataframe with a given schema.
+    Create an empty Polars dataframe with a given schema.
 
     Parameters
     ----------
     schema : dict[str, type]
         Column names mapped to Python types (int, float, str, bool).
-    backend : str, default "polars"
-        Backend to use: "polars" (default) or "pandas".
 
     Returns
     -------
-    nw.DataFrame
-        An empty Narwhals DataFrame with the specified schema.
+    pl.DataFrame
+        An empty Polars DataFrame with the specified schema.
 
-    Raises
-    ------
-    ValueError
-        If an unsupported backend is specified.
+    Example
+    -------
+    >>> df = create_empty_frame({"id": int, "name": str, "score": float})
+    >>> df.schema
+    {'id': Int64, 'name': Utf8, 'score': Float64}
     """
-    if backend == "polars":
-        import polars as pl
-
-        type_map = {int: pl.Int64, float: pl.Float64, str: pl.Utf8, bool: pl.Boolean}
-        pl_schema = {col: type_map.get(dtype, pl.Utf8) for col, dtype in schema.items()}
-        native_df = pl.DataFrame(schema=pl_schema)
-    elif backend == "pandas":
-        import pandas as pd
-
-        type_map = {int: "int64", float: "float64", str: "object", bool: "bool"}
-        pd_schema = {col: type_map.get(dtype, "object") for col, dtype in schema.items()}
-        native_df = pd.DataFrame(columns=list(schema.keys())).astype(pd_schema)
-    else:
-        raise ValueError(f"Unsupported backend: {backend}. Use 'polars' or 'pandas'.")
-
-    return nw.from_native(native_df)
+    type_map = {int: pl.Int64, float: pl.Float64, str: pl.Utf8, bool: pl.Boolean}
+    pl_schema = {col: type_map.get(dtype, pl.Utf8) for col, dtype in schema.items()}
+    return pl.DataFrame(schema=pl_schema)
 
 
 def concat_frames(
-    frames: list[nw.DataFrame[T]], *, how: str = "vertical"
-) -> nw.DataFrame[T]:
+    frames: list[pl.DataFrame], *, how: ConcatMethod = "vertical"
+) -> pl.DataFrame:
     """
-    Concatenate multiple Narwhals DataFrames.
+    Concatenate multiple Polars DataFrames.
 
     Parameters
     ----------
-    frames : list[nw.DataFrame]
-        List of Narwhals DataFrames to concatenate.
-    how : str, default "vertical"
-        Concatenation method: "vertical" (row-wise) or "horizontal" (column-wise).
+    frames : list[pl.DataFrame]
+        List of Polars DataFrames to concatenate.
+    how : ConcatMethod, default "vertical"
+        Concatenation method: "vertical", "vertical_relaxed", "horizontal",
+        "diagonal", "diagonal_relaxed", or "align".
 
     Returns
     -------
-    nw.DataFrame
+    pl.DataFrame
         Concatenated DataFrame.
     """
-    return nw.concat(frames, how=how)
+    return pl.concat(frames, how=how)
 
 
 __all__ = [
     "nw",
+    "pl",
     "wrap_frame",
     "to_native",
     "create_empty_frame",

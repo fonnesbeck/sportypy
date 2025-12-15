@@ -1,6 +1,4 @@
-"""Basic import tests for SportyPy."""
-
-import pytest
+"""Basic import tests"""
 
 
 def test_import_sportypy():
