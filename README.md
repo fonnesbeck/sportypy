@@ -2,15 +2,13 @@
 
 ![SportyPy Logo](sportypy_logo_256.png)
 
-SportyPy is a Python library for sports analytics, built on **PyMC** for Bayesian inference and probabilistic modeling. It provides a modular, high-level interface for hierarchical models, causal inference, and latent variable projections—techniques frequently used in professional sports analytics.
-
 ---
 
 ## SportyPy Implementation Plan
 
 ### I. Foundational Architecture
 
-SportyPy is built on **PyMC** as the core modeling engine, leveraging Python's data science ecosystem. The language and core stack rely on **NumPy** for numerical efficiency and **Polars** for high-performance data manipulation, providing a standard and modern data science toolkit. The statistical backend uses **PyMC** as the probabilistic programming foundation, providing MCMC sampling, variational inference, and GPU acceleration via PyTensor. This enables hierarchical Bayesian models for latent skills, uncertainty quantification, and robust inference with heavy-tailed distributions—including applications like ADVI optimization for projections, Bayesian Hierarchical Regression for player/team effects, and Multivariate t distributions for robustness against outliers. The library itself is modular, with distinct sub-modules for different analytical concerns (e.g., `sportypy.projections`, `sportypy.spatial`), offering **high-level wrappers** built on PyMC model classes for defining complex hierarchical models. Through these wrappers, SportyPy abstracts PyMC model construction into domain-specific APIs, balancing flexibility with ease of use.
+SportyPy is a probabilistic programming toolkit for sports analytics, leveraging Python's data science ecosystem. The language and core stack rely on **NumPy** for numerical efficiency and **Polars** for high-performance data manipulation, providing a standard and modern data science toolkit. The statistical backend uses **PyMC** as the probabilistic programming foundation, providing MCMC sampling, variational inference, and GPU acceleration via PyTensor. This enables hierarchical Bayesian models for latent skills, uncertainty quantification, and robust inference with heavy-tailed distributions—including applications like ADVI optimization for projections, Bayesian Hierarchical Regression for player/team effects, and Multivariate t distributions for robustness against outliers. The library itself is modular, with distinct sub-modules for different analytical concerns (e.g., `sportypy.projections`, `sportypy.spatial`), offering **high-level wrappers** built on PyMC model classes for defining complex hierarchical models. Through these wrappers, SportyPy abstracts PyMC model construction into domain-specific APIs, balancing flexibility with ease of use.
 
 ### II. Core Modeling Modules
 
